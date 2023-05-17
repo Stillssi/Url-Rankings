@@ -1,8 +1,10 @@
-import React, { useRef } from "react";
+import React, { useRef, useCallback } from "react";
 import { data } from "../assets/data";
 import styled from "styled-components";
 import { UilAngleLeftB, UilAngleRightB } from "@iconscout/react-unicons";
+
 const colors = ["#C7F8FF", "#CBC1DE", "#F58F8A", "#E0D8C5", "#D2FFAD"];
+
 const CardsWrapper = styled.div`
   display: flex;
   height: 500px;
@@ -80,37 +82,36 @@ const Cards: React.FC = () => {
   const cardsRef = useRef<HTMLDivElement>(null);
   const sortedData = [...data].sort((a, b) => b.num - a.num);
 
-  const scrollCards = (offset: number) => {
+  const scrollCards = useCallback((offset: number) => {
     if (cardsRef.current) {
       cardsRef.current.scrollTo({
         left: cardsRef.current.scrollLeft + offset,
         behavior: "smooth",
       });
     }
-  };
+  }, []);
+
+  const scrollLeft = useCallback(() => scrollCards(-300), [scrollCards]);
+  const scrollRight = useCallback(() => scrollCards(300), [scrollCards]);
 
   return (
     <CardsWrapper>
-      <ButtonPrev onClick={() => scrollCards(-300)}>
+      <ButtonPrev onClick={scrollLeft}>
         <UilAngleLeftB />
       </ButtonPrev>
       <CardsContainer ref={cardsRef}>
-        {sortedData.map((itm, idx) => {
-          return (
-            <Card color={colors[idx % colors.length]}>
-              <div>
-                <Rank>{idx + 1 + "등."}</Rank>
-                <Url>{itm.url}</Url>
-                <FontWrapper>{"방문 수: " + itm.num}</FontWrapper>
-                <FontWrapper>
-                  {"지연율: " + itm.ping.toFixed(7) + " ms"}
-                </FontWrapper>
-              </div>
-            </Card>
-          );
-        })}
+        {sortedData.map(({ url, num, ping }, idx) => (
+          <Card color={colors[idx % colors.length]} key={idx}>
+            <div>
+              <Rank>{`${idx + 1}등.`}</Rank>
+              <Url>{url}</Url>
+              <FontWrapper>{`방문 수: ${num}`}</FontWrapper>
+              <FontWrapper>{`지연율: ${ping.toFixed(7)} ms`}</FontWrapper>
+            </div>
+          </Card>
+        ))}
       </CardsContainer>
-      <ButtonNext onClick={() => scrollCards(300)}>
+      <ButtonNext onClick={scrollRight}>
         <UilAngleRightB />
       </ButtonNext>
     </CardsWrapper>
