@@ -1,5 +1,5 @@
 import React, { useRef, useCallback } from "react";
-import { data } from "../assets/data";
+import data from "../assets/data.json";
 import styled from "styled-components";
 import { UilAngleLeftB, UilAngleRightB } from "@iconscout/react-unicons";
 
@@ -20,6 +20,7 @@ const CardsContainer = styled.div`
 const FontWrapper = styled.div`
   font-size: 18px;
   font-weight: 600;
+  margin-bottom: 8px;
 `;
 
 const Button = styled.button`
