@@ -56,7 +56,7 @@ const Card = styled.div`
   position: relative;
 
   &:hover {
-    transform: scale(1.1) translate(10%, 10%);
+    transform: scale(1.1) translate(0%, 10%);
     border-radius: 0.91rem; // Adjust this value as per your need
     z-index: 1;
   }
