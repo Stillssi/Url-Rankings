@@ -4,7 +4,12 @@ import styled from "styled-components";
 import { UilAngleLeftB, UilAngleRightB } from "@iconscout/react-unicons";
 
 const colors = ["#C7F8FF", "#CBC1DE", "#F58F8A", "#E0D8C5", "#D2FFAD"];
-
+interface IData {
+  url: string;
+  num: number;
+  ping: boolean | number; // ping이 boolean임
+  time: number;
+}
 const CardsWrapper = styled.div`
   display: flex;
   height: 500px;
@@ -21,6 +26,7 @@ const FontWrapper = styled.div`
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 8px;
+  text-align: center;
 `;
 
 const Button = styled.button`
@@ -54,7 +60,6 @@ const Card = styled.div`
   flex-shrink: 0;
   transition: all 0.3s;
   position: relative;
-
   &:hover {
     transform: scale(1.1) translate(0%, 10%);
     border-radius: 0.91rem; // Adjust this value as per your need
@@ -70,6 +75,7 @@ const Rank = styled(FontWrapper)`
 
 const Url = styled(FontWrapper)`
   display: flex;
+  width: 250px;
   align-items: center;
   justify-content: center;
   text-align: center;
@@ -81,7 +87,7 @@ const Url = styled(FontWrapper)`
 
 const Cards: React.FC = () => {
   const cardsRef = useRef<HTMLDivElement>(null);
-  const sortedData = [...data].sort((a, b) => b.num - a.num);
+  const sortedData: IData[] = [...data].sort((a, b) => b.num - a.num);
 
   const scrollCards = useCallback((offset: number) => {
     if (cardsRef.current) {
@@ -105,9 +111,13 @@ const Cards: React.FC = () => {
           <Card color={colors[idx % colors.length]} key={idx}>
             <div>
               <Rank>{`${idx + 1}등.`}</Rank>
-              <Url>{url}</Url>
+              <Url>{url.slice(8, 34)}</Url>
               <FontWrapper>{`방문 수: ${num}`}</FontWrapper>
-              <FontWrapper>{`지연율: ${ping.toFixed(7)} ms`}</FontWrapper>
+              {typeof ping === "number" ? (
+                <FontWrapper>{`지연율: ${ping.toFixed(7)} ms`}</FontWrapper>
+              ) : (
+                <FontWrapper>{`🛠️ ping을 보낼 수 없습니다.`}</FontWrapper>
+              )}
             </div>
           </Card>
         ))}
