@@ -111,7 +111,7 @@ const Cards: React.FC = () => {
           <Card color={colors[idx % colors.length]} key={idx}>
             <div>
               <Rank>{`${idx + 1}등.`}</Rank>
-              <Url>{url.slice(8, 34)}</Url>
+              <Url>{url}</Url>
               <FontWrapper>{`방문 수: ${num}`}</FontWrapper>
               {typeof ping === "number" ? (
                 <FontWrapper>{`지연율: ${ping.toFixed(7)} ms`}</FontWrapper>
